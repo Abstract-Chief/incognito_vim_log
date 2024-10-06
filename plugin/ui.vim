@@ -59,7 +59,10 @@ function! MessagePanelSetText(find_id)
    endif
    call setline(3, l:lines)
 endfunction
-function! MessagePanelHandleAddPattern(pattern)
+function! PanelClearPattern()
+   let g:MessagesPanelPatterContinue=[]
+endfunction
+function! PanelAddPattern(pattern)
    call add(g:MessagesPanelPatterContinue, a:pattern)
    call MessagePanelSetText("null")
 endfunction
