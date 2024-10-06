@@ -2,7 +2,9 @@ let g:MessagesPanelMessages = []
 let g:MessagesPanelFlags = ['m','t']
 let g:MessagesPanelLastSearch="null"
 let g:MessagesPanelBufferID=0
+let g:MessagesPanelID=0
 let g:MessagesPanelPatterContinue=[]
+
 
 function! MessagesPanelCreateBuffer()
    botright vsplit
@@ -150,13 +152,31 @@ function! HandleEnterKey()
 endfunction
 
 function! MessagesPanelOpen(flags)
+   if g:MessagesPanelID != 0
+      echo "Messages panel is already open"
+      return 0
+   endif
    let g:MessagesPanelMessages=ParseAllMessages()
    let g:MessagesPanelBufferID=win_getid()
-
    let g:MessagesPanelFlags=split(a:flags." ", ' ')
    let l:id = GetMessageIdFromCursor()
    call MessagesPanelCreateBuffer()
    call MessagesPanelSetSettings()
    call MessagePanelSetText("null")
    call MessagePanelSetCursor(l:id)
+   let g:MessagesPanelID=win_getid()
+endfunction
+function! MessagePanelClose()
+   if g:MessagesPanelID != 0
+      call win_execute(g:MessagesPanelID,"exit")
+   else 
+      echo "Messages panel is already closed"
+   endif
+endfunction
+function! MessagePanelHandle(flags)
+   if g:MessagesPanelID == 0
+      call MessagesPanelOpen(a:flags)
+   else
+      call MessagePanelClose()
+   endif
 endfunction

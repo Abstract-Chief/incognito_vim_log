@@ -1,1 +1,1 @@
-autocmd FileType log call LogsAnalyzeCreateMatchGroup()
+autocmd BufReadPost *.log :call LogsAnalyzeCreateMatchGroup()
