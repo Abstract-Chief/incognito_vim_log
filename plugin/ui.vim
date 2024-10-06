@@ -11,16 +11,13 @@ function! MessagesPanelCreateBuffer()
    enew
    let l:size=g:MessagesPanelMessages[1]+1
    let l:sizes=[12, 20]
-   echo l:size
    if index(g:MessagesPanelFlags, 'm') != -1  "msg_type
       let l:size=l:size+l:sizes[0]+1
    endif
-   echo l:size
    if index(g:MessagesPanelFlags, 't') != -1  "msg_type
       let l:size=l:size+l:sizes[1]+1
    endif
    execute "vertical resize ". l:size
-   echo l:size
 endfunction
 function! MessagePanelSetText(find_id)
    call setline(1, ['Obuspa Messages','Guide: ?','----------------'])
