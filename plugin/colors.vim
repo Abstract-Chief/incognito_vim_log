@@ -9,8 +9,8 @@ highlight ObuspaMessageGetResp ctermfg=LightGreen guifg=#ab8029
 highlight ObuspaMessageOperate ctermfg=LightGreen guifg=#038c07
 highlight ObuspaMessageOperateResp ctermfg=LightGreen guifg=#015903
 
-highlight TimePattern ctermfg=Gray guifg=#808080
-highlight FilePattern ctermfg=Gray guifg=#808080
+highlight CwmpProxyTime ctermfg=Gray guifg=#808080
+highlight CwmpProxyFile ctermfg=Gray guifg=#808080
 highlight MsgPattern ctermfg=Gray guifg=#87af87
 
 highlight ModelPattern ctermfg=LightBlue guifg=#339733

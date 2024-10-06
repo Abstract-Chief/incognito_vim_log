@@ -3,6 +3,8 @@ function! LogsAnalyzeCreateMatchGroup()
    syntax match LevelError /level=error/ 
    syntax match LevelWarning /level=warning/
    syntax match LevelInfo /level=info/
+   syntax match CwmpProxyTime /time="[^"]*"/
+   syntax match CwmpProxyFile /file="[^"]*"/
 
    syntax match ModelPattern /Device\(\.[A-Za-z0-9_]*\)\+/
    syntax match IpAddressWithPort /\(\d\{1,3}\.\)\{3}\d\{1,3}\(\d\{0,5}\)\(:\d\{1,5}\)\?/
