@@ -169,6 +169,7 @@ endfunction
 function! MessagePanelClose()
    if g:MessagesPanelID != 0
       call win_execute(g:MessagesPanelID,"exit")
+      let g:MessagesPanelID=0
    else 
       echo "Messages panel is already closed"
    endif
