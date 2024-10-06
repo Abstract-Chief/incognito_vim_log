@@ -52,12 +52,12 @@ For `obuspa` logs, you can use the dedicated side panel for analysis:
 ### flags
    - `m` - Add Message Type in panel
    - `t` - Add Message receive/send time in panel
-### Ignoring messages by pattern
-    ```vim
+### Ignoring messages by pattern:
+```vim
     :call PanelAddPattern(<pattern>)
     :call PanelAddPattern("DASHBOARDPARAM-.*")
     :call PanelClearPatter()
-    ```
+```
 ## UI
 ### General View
 ![image](https://github.com/user-attachments/assets/0c7fb8d8-5e7c-4bf5-89fb-8ceaf0ecb3eb)
