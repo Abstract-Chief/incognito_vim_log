@@ -111,7 +111,6 @@ function! MessagePanelHelp()
    echo "*  ? - Help"
 endfunction
 function! MessagesPanelSetSettings()
-   source main.vim
    setlocal buftype=nofile
    setlocal bufhidden=hide
    setlocal noswapfile
