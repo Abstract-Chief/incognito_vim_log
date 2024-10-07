@@ -28,7 +28,7 @@ function! EnableCustomHighlightsBase()
 highlight LevelDebug ctermfg=Cyan guifg=Cyan
     highlight LevelError ctermfg=Red guifg=Red
     highlight LevelWarning ctermfg=Yellow guifg=Yellow
-    highlight LevelInfo ctermfg=Green guifg=Green
+    highlight LevelInfo ctermfg=Blue guifg=Blue
 
     highlight ObuspaMessageNotify ctermfg=Cyan guifg=Cyan
     highlight ObuspaMessageGet ctermfg=Yellow guifg=Yellow
@@ -44,9 +44,9 @@ highlight LevelDebug ctermfg=Cyan guifg=Cyan
     highlight IPAddressWithPort ctermfg=Magenta guifg=Magenta
     highlight GetRequestTimePattern ctermfg=Yellow guifg=Yellow
 
-    highlight ObuspaErrorFalse ctermfg=Blue guifg=Blue
+    highlight ObuspaErrorFalse ctermfg=Green guifg=Green
     highlight ObuspaErrorTrue ctermfg=Red guifg=Red
-    highlight ObuspaErrorMsgFalse ctermfg=Blue guifg=Blue
+    highlight ObuspaErrorMsgFalse ctermfg=Green guifg=Green
     highlight ObuspaErrorMsgTrue ctermfg=Red guifg=Red
 endfunction
 
