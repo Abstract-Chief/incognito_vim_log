@@ -21,6 +21,9 @@ function! ParseAllMessages()
        elseif l:msg_type == "GET_RESP"
           let l:time_str = FindOccurrences('sending at time', l:msg, 'up',1)
           let l:time=getline(l:time_str)[25:44]
+          let l:first_param = FindOccurrences('requested_path:', l:msg, 'down',1)
+          let l:first_param = matchstr(getline(l:first_param), '"\zs[^"]\+"')[0:-2]
+          let l:data = {'first_param': l:first_param}
        elseif l:msg_type == "NOTIFY"
           let l:time_str = FindOccurrences('sending at time', l:msg, 'up',1)
           let l:time=getline(l:time_str)[23:42]
@@ -36,6 +39,8 @@ function! ParseAllMessages()
        elseif l:msg_type == "OPERATE_RESP"
           let l:time_str = FindOccurrences('sending at time', l:msg, 'up',1)
           let l:time=getline(l:time_str)[29:49]
+          let l:first_param = matchstr(getline(l:first_param), '"\zs[^"]\+"')[0:-2]
+          let l:data = {'first_param': l:first_param}
        endif
        if l:data != {}
           let l:data_size=strlen(l:data['first_param'])

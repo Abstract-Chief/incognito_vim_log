@@ -5,6 +5,9 @@ let g:MessagesPanelBufferID=0
 let g:MessagesPanelID=0
 let g:MessagesPanelPatterContinue=[]
 
+function! MessagePanelGetLineId(line)
+   return g:MessagesPanelMessages[0][a:line-3][0]
+endfunction
 function! MessagePanelGetMsgId(line)
    let l:data=split(a:line, ' ')
    if len(l:data) < 2
@@ -15,8 +18,11 @@ endfunction
 function! MessagesPanelCreateBuffer()
    botright vsplit
    enew
-   let l:size=g:MessagesPanelMessages[1]+3
+   let l:size=2
    let l:sizes=[12, 20]
+   if index(g:MessagesPanelFlags, 'i') != -1  "msg_type
+      let l:size=g:MessagesPanelMessages[1]+1
+   endif
    if index(g:MessagesPanelFlags, 'm') != -1  "msg_type
       let l:size=l:size+l:sizes[0]+1
    endif
@@ -45,7 +51,10 @@ function! MessagePanelSetText(find_id)
       if a:find_id != "null" && id[0] != a:find_id 
          continue
       endif
-      let l:info=[[id[0],l:sizes[0]]]
+      let l:info=[]
+      if index(g:MessagesPanelFlags, 'i') != -1  "msg_type
+         call add(l:info, [id[0],l:sizes[0]])
+      endif
       if index(g:MessagesPanelFlags, 'm') != -1  "msg_type
          call add(l:info, [id[1],l:sizes[1]])
       endif
@@ -97,7 +106,7 @@ function! MessagePanelSetCursor(id)
 endfunction
 
 function! MessagePanelHandleSearchFullNoStep()
-   let l:id=split(getline('.'),' ')[0]
+   let l:id=MessagePanelGetLineId(line('.'))
    let l:my_id=win_getid()
    call MessagePanelHandleSearchFull()
    call win_gotoid(l:my_id)
@@ -107,6 +116,7 @@ endfunction
 function! MessagePanelHandleRefreshFull()
    call MessagePanelHandleRefresh()
    call win_gotoid(g:MessagesPanelBufferID)
+   normal! zR
 endfunction
 function! MessagePanelHandleSearchFull()
    let l:id=MessagePanelHandleSearch()
@@ -117,14 +127,13 @@ function! MessagePanelHandleSearchFull()
 endfunction
 
 function! MessagePanelHandleRefresh()
-   let l:id=split(getline('.'),' ')[0]
+   let l:id=MessagePanelGetLineId(line('.'))
    call MessagePanelSetText("null")
    call MessagePanelSetCursor(l:id)
 endfunction
 function! MessagePanelHandleSearch()
-   let l:line=getline('.')
    if g:MessagesPanelLastSearch == "null"
-      let l:msg_id=split(l:line, ' ')[0]
+      let l:msg_id=MessagePanelGetLineId(line('.'))
       call MessagePanelSetText(l:msg_id)
       return l:msg_id
    endif
@@ -147,12 +156,20 @@ function! MessagePanelHandleMove()
          call setline(line, getline(line)[2:])
       endfor
    endif
-   let l:id=MessagePanelGetMsgId(getline('.'))
+   let l:id=MessagePanelGetLineId(line('.'))
    if l:id == "null"
       return
    endif
-   let l:lines=FindOccurrences(l:id, 1, 'down', 0)
+   let l:lines=[]
+   let l:i=0
+   for l:msg in g:MessagesPanelMessages[0]
+      if l:msg[0] == l:id
+         call add(l:lines, l:i+3)
+      endif
+      let l:i=l:i+1
+   endfor
    let g:MessagesPanelLastPlugLines=l:lines
+   echo l:lines
    if l:lines == []
       return
    endif
@@ -198,7 +215,8 @@ function! MessagesPanelSetSettings()
    nnoremap <buffer> <UP> :call MessagePanelHandleUp()<CR>
 endfunction
 function! HandleEnterKey()
-   let l:id=split(getline('.'),' ')[0]
+   let l:id=g:MessagePanelGetLineId(line('.'))
+   echo l:id
    let l:my_id=win_getid()
    if l:id != ""
       call win_gotoid(g:MessagesPanelBufferID)
