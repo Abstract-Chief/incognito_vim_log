@@ -207,7 +207,7 @@ function! MessagesPanelSetSettings()
    setlocal nonumber
 
    set cursorline
-   hi CursorLine   cterm=NONE ctermbg=Gray ctermfg=NONE
+   hi CursorLine   cterm=NONE ctermbg=DarkGrey ctermfg=White guibg=Gray guifg=White
    setlocal cursorline
    autocmd BufEnter <buffer> setlocal cursorline
    autocmd BufLeave <buffer> setlocal nocursorline
