@@ -141,14 +141,12 @@ function! MessagePanelHelp()
    echo "*  ? - Help"
 endfunction
 let g:MessagesPanelLastPlugLines=[]
-function! MessagePanelHandleDown()
-   
+function! MessagePanelHandleMove()
    if g:MessagesPanelLastPlugLines != []
       for line in g:MessagesPanelLastPlugLines
          call setline(line, getline(line)[2:])
       endfor
    endif
-   call cursor(line('.')+1,1)
    let l:id=MessagePanelGetMsgId(getline('.'))
    if l:id == "null"
       return
@@ -162,8 +160,13 @@ function! MessagePanelHandleDown()
       call setline(line,"+ ".getline(line))
    endfor
 endfunction
+function! MessagePanelHandleDown()
+   call cursor(line('.')+1,1)
+   call MessagePanelHandleMove()
+endfunction
 function! MessagePanelHandleUp()
    call cursor(line('.')-1,1)
+   call MessagePanelHandleMove()
 endfunction
 function! MessagesPanelSetSettings()
    setlocal buftype=nofile
