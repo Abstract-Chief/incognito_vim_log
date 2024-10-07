@@ -6,7 +6,18 @@ let g:MessagesPanelID=0
 let g:MessagesPanelPatterContinue=[]
 
 function! MessagePanelGetLineId(line)
-   return g:MessagesPanelMessages[0][a:line-3][0]
+   let l:line=a:line-3
+   let l:cur=0
+   for l:msg in g:MessagesPanelMessages[0]
+      if MessagePanelPatternCheck(l:msg[0])
+         continue
+      endif
+      if l:line == l:cur
+         return l:msg[0]
+      endif
+      let l:cur=l:cur+1
+   endfor
+   return "null"
 endfunction
 function! MessagePanelGetMsgId(line)
    let l:data=split(a:line, ' ')
@@ -88,6 +99,7 @@ function! PanelClearPattern()
    let g:MessagesPanelPatterContinue=[]
 endfunction
 function! PanelAddPattern(pattern)
+   let g:MessagesPanelLastPlugLines=[]
    call add(g:MessagesPanelPatterContinue, a:pattern)
    call MessagePanelSetText("null")
 endfunction
@@ -163,6 +175,9 @@ function! MessagePanelHandleMove()
    let l:lines=[]
    let l:i=0
    for l:msg in g:MessagesPanelMessages[0]
+      if MessagePanelPatternCheck(l:msg[0])
+         continue
+      endif
       if l:msg[0] == l:id
          call add(l:lines, l:i+3)
       endif
