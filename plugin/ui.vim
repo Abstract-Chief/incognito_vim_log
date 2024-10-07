@@ -5,14 +5,23 @@ let g:MessagesPanelBufferID=0
 let g:MessagesPanelID=0
 let g:MessagesPanelPatterContinue=[]
 
-
+function! MessagePanelGetMsgId(line)
+   let l:data=split(a:line, ' ')
+   if len(l:data) < 2
+      return "null"
+   endif
+   return l:data[0]
+endfunction
 function! MessagesPanelCreateBuffer()
    botright vsplit
    enew
-   let l:size=g:MessagesPanelMessages[1]+1
+   let l:size=g:MessagesPanelMessages[1]+3
    let l:sizes=[12, 20]
    if index(g:MessagesPanelFlags, 'm') != -1  "msg_type
       let l:size=l:size+l:sizes[0]+1
+   endif
+   if index(g:MessagesPanelFlags, 'd') != -1  "msg_type
+      let l:size=l:size+g:MessagesPanelMessages[2]+1
    endif
    if index(g:MessagesPanelFlags, 't') != -1  "msg_type
       let l:size=l:size+l:sizes[1]+1
@@ -23,9 +32,9 @@ function! MessagePanelSetText(find_id)
    call setline(1, ['Obuspa Messages','Guide: ?','----------------'])
    let l:ids=g:MessagesPanelMessages[0]
    let l:max_id_size=g:MessagesPanelMessages[1]
+   let l:max_data_size=g:MessagesPanelMessages[2]
    let l:lines = []
-   let l:sizes=[l:max_id_size, 12, 11]
-
+   let l:sizes=[l:max_id_size, 12, 11,l:max_data_size]
    if g:MessagesPanelFlags==[]
       return 0
    endif
@@ -43,9 +52,16 @@ function! MessagePanelSetText(find_id)
       if index(g:MessagesPanelFlags, 't') != -1  "msg_type
          call add(l:info, [id[2],l:sizes[2]])
       endif
+      if index(g:MessagesPanelFlags, 'd') != -1  "data
+         if id[3] != {}
+            call add(l:info, [id[3]["first_param"],l:sizes[3]])
+         endif
+      endif
       let str="none"
       let l:count=len(l:info)
-      if l:count == 3
+      if l:count == 4
+         let l:str=printf('%-'.l:info[0][1].'s %-'.l:info[1][1].'s %-'.l:info[2][1].'s %-'.l:info[3][1].'s', l:info[0][0],l:info[1][0],l:info[2][0],l:info[3][0])
+      elseif l:count == 3
          let l:str=printf('%-'.l:info[0][1].'s %-'.l:info[1][1].'s %-'.l:info[2][1].'s', l:info[0][0],l:info[1][0],l:info[2][0])
       elseif l:count == 2
          let l:str=printf('%-'.l:info[0][1].'s %-'.l:info[1][1].'s', l:info[0][0],l:info[1][0])
@@ -124,6 +140,31 @@ function! MessagePanelHelp()
    echo "*  Q - Quit"
    echo "*  ? - Help"
 endfunction
+let g:MessagesPanelLastPlugLines=[]
+function! MessagePanelHandleDown()
+   
+   if g:MessagesPanelLastPlugLines != []
+      for line in g:MessagesPanelLastPlugLines
+         call setline(line, getline(line)[2:])
+      endfor
+   endif
+   call cursor(line('.')+1,1)
+   let l:id=MessagePanelGetMsgId(getline('.'))
+   if l:id == "null"
+      return
+   endif
+   let l:lines=FindOccurrences(l:id, 1, 'down', 0)
+   let g:MessagesPanelLastPlugLines=l:lines
+   if l:lines == []
+      return
+   endif
+   for line in l:lines
+      call setline(line,"+ ".getline(line))
+   endfor
+endfunction
+function! MessagePanelHandleUp()
+   call cursor(line('.')-1,1)
+endfunction
 function! MessagesPanelSetSettings()
    setlocal buftype=nofile
    setlocal bufhidden=hide
@@ -150,6 +191,8 @@ function! MessagesPanelSetSettings()
    nnoremap <buffer> s  :call MessagePanelHandleSearchFullNoStep()<CR>
    nnoremap <buffer> Q  :q<CR>
    nnoremap <buffer> ?  :call MessagePanelHelp()<CR>
+   nnoremap <buffer> <DOWN> :call MessagePanelHandleDown()<CR>
+   nnoremap <buffer> <UP> :call MessagePanelHandleUp()<CR>
 endfunction
 function! HandleEnterKey()
    let l:id=split(getline('.'),' ')[0]

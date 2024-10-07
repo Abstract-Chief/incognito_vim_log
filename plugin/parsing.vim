@@ -3,6 +3,7 @@ function! ParseAllMessages()
    let l:messages = FindOccurrences('msg_id: "[^"]*"', 1, 'down',0)
    let l:result = []
    let l:max_id_size=0
+   let l:max_data_size=0
    for l:msg in l:messages
        let l:msg_id = matchstr(getline(l:msg), '"\zs[^"]\+"')[0:-2]
        let l:msg_type = split(getline(l:msg+1), ': ')[1]
@@ -10,20 +11,41 @@ function! ParseAllMessages()
        if l:msg_id_size > l:max_id_size
           let l:max_id_size = l:msg_id_size
        endif
+       let l:data={}
        if l:msg_type == "GET"
           let l:time_str = FindOccurrences('processing at time', l:msg, 'down',1)
           let l:time=getline(l:time_str)[25:45]
+          let l:first_param = FindOccurrences('param_paths:', l:msg, 'down',1)
+          let l:first_param = matchstr(getline(l:first_param), '"\zs[^"]\+"')[0:-2]
+          let l:data = {'first_param': l:first_param}
        elseif l:msg_type == "GET_RESP"
           let l:time_str = FindOccurrences('sending at time', l:msg, 'up',1)
           let l:time=getline(l:time_str)[25:44]
        elseif l:msg_type == "NOTIFY"
           let l:time_str = FindOccurrences('sending at time', l:msg, 'up',1)
           let l:time=getline(l:time_str)[23:42]
+          let l:first_param = FindOccurrences('subscription_id:', l:msg, 'down',1)
+          let l:first_param = matchstr(getline(l:first_param), '"\zs[^"]\+"')[0:-2]
+          let l:data = {'first_param': l:first_param}
+       elseif l:msg_type == "OPERATE"
+          let l:time_str = FindOccurrences('processing at time', l:msg, 'down',1)
+          let l:time=getline(l:time_str)[29:49]
+          let l:first_param = FindOccurrences('command:', l:msg, 'down',1)
+          let l:first_param = matchstr(getline(l:first_param), '"\zs[^"]\+"')[0:-2]
+          let l:data = {'first_param': l:first_param}
+       elseif l:msg_type == "OPERATE_RESP"
+          let l:time_str = FindOccurrences('sending at time', l:msg, 'up',1)
+          let l:time=getline(l:time_str)[29:49]
        endif
-       let l:data={}
+       if l:data != {}
+          let l:data_size=strlen(l:data['first_param'])
+          if l:max_data_size < l:data_size
+             let l:max_data_size = l:data_size
+          endif
+        endif
        call add(l:result, [l:msg_id , l:msg_type ,  l:time,l:data])
    endfor
-   return [l:result, l:max_id_size]
+   return [l:result, l:max_id_size, l:max_data_size]
 endfunction
 function! FindOccurrences(pattern, start_line, direction,flag)
     let l:occurrences = []
