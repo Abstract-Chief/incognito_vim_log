@@ -47,9 +47,10 @@ For `obuspa` logs, you can use the dedicated side panel for analysis:
 2. Activate the analysis panel with the command:
     ```vim
     :call MessagePanelHandle("<flag1> <flag2>")
-    :nmap <F9> :call MessagePanelHandle("m t")<CR>
+    :nmap <F9> :call MessagePanelHandle("m t d")<CR>
     ```
 ### flags
+   - `i` - Add Message Id in panel
    - `m` - Add Message Type in panel
    - `t` - Add Message receive/send time in panel
    - `d` - Add First message Data param in panel
@@ -61,10 +62,13 @@ For `obuspa` logs, you can use the dedicated side panel for analysis:
 ```
 ## UI
 ### General View
-![image](https://github.com/user-attachments/assets/0c7fb8d8-5e7c-4bf5-89fb-8ceaf0ecb3eb)
+![image](https://github.com/user-attachments/assets/e13f9f21-2c85-43c8-adab-f1012affb505)
 ### Search View
-![image](https://github.com/user-attachments/assets/d164a2c7-a08f-4062-8978-f3b1cc7a0650)
+![image](https://github.com/user-attachments/assets/8c0ccfd5-b919-4568-8e62-550c1b72c397)
+### All flags View
+![image](https://github.com/user-attachments/assets/39a41d34-b8b9-4c4d-a1cb-0343a68ae808)
 ### Sorting View
-![image](https://github.com/user-attachments/assets/d87bc687-b950-48eb-9bb3-2743e21ede25)
+![image](https://github.com/user-attachments/assets/64d4fce6-7ab9-4fc3-94b7-c0990031e7e5)
+
 
 
