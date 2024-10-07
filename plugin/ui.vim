@@ -207,10 +207,16 @@ function! MessagesPanelSetSettings()
    setlocal nonumber
 
    set cursorline
-   hi CursorLine   cterm=NONE ctermbg=254 ctermfg=NONE
+   hi CursorLine   cterm=NONE ctermbg=Gray ctermfg=NONE
    setlocal cursorline
    autocmd BufEnter <buffer> setlocal cursorline
    autocmd BufLeave <buffer> setlocal nocursorline
+
+   if index(g:MessagesPanelFlags, 'uc') != -1  "msg_type
+      call EnableCustomHighlights()
+   else
+      call EnableCustomHighlightsBase()
+   endif
 
    call matchadd('ObuspaMessageNotify', '.*NOTIFY.*', 10, 331)
    call matchadd('ObuspaMessageGet', '.*GET.*', 10, 332)

@@ -30,7 +30,7 @@ highlight LevelDebug ctermfg=Cyan guifg=Cyan
     highlight LevelWarning ctermfg=Yellow guifg=Yellow
     highlight LevelInfo ctermfg=Green guifg=Green
 
-    highlight ObuspaMessageNotify ctermfg=Green guifg=Green
+    highlight ObuspaMessageNotify ctermfg=Cyan guifg=Cyan
     highlight ObuspaMessageGet ctermfg=Yellow guifg=Yellow
     highlight ObuspaMessageGetResp ctermfg=Blue guifg=Blue
     highlight ObuspaMessageOperate ctermfg=Green guifg=Green
