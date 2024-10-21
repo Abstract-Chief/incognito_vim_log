@@ -54,6 +54,7 @@ For `obuspa` logs, you can use the dedicated side panel for analysis:
    - `m` - Add Message Type in panel
    - `t` - Add Message receive/send time in panel
    - `d` - Add First message Data param in panel
+   - 'uc' - Use custom colors
 ### Ignoring messages by pattern:
 ```vim
     :call PanelAddPattern(<pattern>)
