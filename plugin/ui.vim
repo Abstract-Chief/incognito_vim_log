@@ -32,7 +32,7 @@ function! MessagesPanelCreateBuffer()
    let l:size=3
    let l:sizes=[12, 20]
    if index(g:MessagesPanelFlags, 'i') != -1  "msg_type
-      let l:size=g:MessagesPanelMessages[1]+1
+      let l:size=g:MessagesPanelMessages[1]+2
    endif
    if index(g:MessagesPanelFlags, 'm') != -1  "msg_type
       let l:size=l:size+l:sizes[0]+1
