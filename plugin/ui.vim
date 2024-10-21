@@ -29,7 +29,7 @@ endfunction
 function! MessagesPanelCreateBuffer()
    botright vsplit
    enew
-   let l:size=2
+   let l:size=3
    let l:sizes=[12, 20]
    if index(g:MessagesPanelFlags, 'i') != -1  "msg_type
       let l:size=g:MessagesPanelMessages[1]+1
